@@ -17,26 +17,34 @@
         <input type="text" class="form-control" name="pName" id="pName" autocomplete="username"
             placeholder="Enter Product Name..">
         <div id="err-pName" class="msg alert alert-danger d-none" role="alert"></div>
-        <label for=""><b>Product Code :</b></label>
-        <input type="text" class="form-control" name="pCode" id="pCode" placeholder="Enter Product Code:"><br>
 
-        <label for=""><b>Price Range :</b></label><br>
-        <input type="range" class="" style="width: 100%;" id="pRange" min="0" max="10000" step="1" value="0"><br>
-        <span id="rangeValue" class="" style="color: black;">0</span><br>
+        <label class="mt-3" for="pCode"><b>Product Code :</b></label>
+        <input type="text" class="form-control" name="pCode" id="pCode" placeholder="Enter Product Code:">
 
-        <label for="colorSelect"><b>Color Selection :</b></label>
-        <input type="color" class="form-control" id="colorSelect"><br>
+        <label class="mt-3" for="pRange"><b>Price Range :</b></label><br>
+        <input type="range" class="slider" style="width: 100%;" id="minPrice" min="0" max="10000" step="1" value="0">
+        <input type="range" class="slider" style="width: 100%;" id="maxPrice" min="0" max="10000" step="1"
+            value="10000">
+        <span><b>Minimum Price is : </b><span id="minRange" class=""
+                style="background-color: burlywood;">0</span></span><br>
+        <span><b>Maximum Price Is : </b><span id="maxRange" class=""
+                style="background-color: burlywood;">0</span></span><br>
 
-        <div id="colorDisplay"></div>
-        <div id="colorCode">Selected Color: #000000</div>
-        <div style="margin-top: 10px;">
-            <span id="colorName">Select a color</span>
-        </div>
+        <label class="mt-3" for="colorSelect"><b>Color Selection :</b></label><br>
+        <input type="color" id="colorSelect" value="#ff0000">
+
+        <div class="preview-box mt-3" style="background-color: #ff0000; text-align: center;" id="colorDisplay">Selected
+            Color</div><br>
+        <span><b>Color Name : </b><span class="color-name" id="colorCode"
+                style="background-color:bisque;"></span></span><br>
 
 
-        <label for="pDate"><b>Manufacturing Date :</b></label>
-        <input type="date" class="form-control" name="" id="pDate"><br>
-        <button type="submit" class="btn btn-primary mt-2 float-end" name="submit">Submit</button>
+        <label class="mt-3" for="pDate"><b>Manufacturing Date :</b></label>
+        <input type="text" class="form-control" id="pDate" placeholder="DD/MM/YYYY" maxlength="10"><br>
+        <div id="result" id="pAge"></div>
+        <div id="err-pDate" class=""></div>
+
+        <button type="submit" id="submit" class="btn btn-primary mt-2 float-end" name="submit">Submit</button>
     </form>
 </body>
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
@@ -44,76 +52,154 @@
 <script>
 
     $(function () {
+
+        // for prodect Name field
+
         $('#pName').on('input', function () {
-            let value = $(this).val();
-            if (value.length > 0) {
-                $(this).val(value.charAt(0).toUpperCase() + value.slice(1));
-                $(this).val(value.replace(/[0-9]/g, ''));
-            }
+            let inputText = $(this).val();
+
+            let noNumbers = inputText.replace(/[0-9]/g, '');
+            $(this).val(noNumbers);
+
+            let capitalizedText = noNumbers.replace(/\b\w/g, function (match) {
+                return match.toUpperCase();
+            });
+
+            $(this).val(capitalizedText);
+
         });
 
+
+        // for product code field
         $('#pCode').on('input', function () {
-            let value = $(this).val();
-            value = value.replace(/[^A-Za-z0-9-]/g, '');
 
-            if (value.length >= 4 && value.charAt(3) !== '-') {
-                value = value.slice(0, 3) + '-' + value.slice(3);
+            let input = $(this).val();
+
+            input = input.toUpperCase();
+
+            input = input.replace(/[^A-Z0-9]/g, '');
+
+            if (input.length > 3 && input[3] !== '-') {
+                input = input.slice(0, 3) + '-' + input.slice(3);
             }
 
-            if (value.length > 7) {
-                value = value.slice(0, 7);
+            if (input.length > 7) {
+                input = input.slice(0, 7);
             }
 
-            $(this).val(value);
+            $(this).val(input);
         });
 
 
-        $('#rangeValue').text($('#pRange').val());
+        // for product price range field
+        function formatNumber(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
 
-        $('#pRange').on('input', function () {
-            $('#rangeValue').text($(this).val());
+        let minPriceSlider = $('#minPrice');
+        let maxPriceSlider = $('#maxPrice');
+        let minPriceValue = $('#minRange');
+        let maxPriceValue = $('#maxRange');
+
+        minPriceSlider.on('input', function () {
+            let minValue = $(this).val();
+            minPriceValue.text(formatNumber(minValue));
+            if (parseInt(minValue) > parseInt(maxPriceSlider.val())) {
+                maxPriceSlider.val(minValue);
+                maxPriceValue.text(formatNumber(minValue));
+            }
         });
+
+        maxPriceSlider.on('input', function () {
+            let maxValue = $(this).val();
+            maxPriceValue.text(formatNumber(maxValue));
+            if (parseInt(maxValue) < parseInt(minPriceSlider.val())) {
+                minPriceSlider.val(maxValue);
+                minPriceValue.text(formatNumber(maxValue));
+            }
+        });
+
+        minPriceValue.text(formatNumber(minPriceSlider.val()));
+        maxPriceValue.text(formatNumber(maxPriceSlider.val()));
+
+
+        // for color Selection field
 
 
         $('#colorSelect').on('input', function () {
             var selectedColor = $(this).val();
 
             $('#colorDisplay').css('background-color', selectedColor);
-            $('#colorName').text(colorName);
+
+            $('#colorCode').text(selectedColor);
         });
 
 
 
-        // Product Date
+        // for Product Date field
 
+        function calculateAge(dateString) {
+            let today = new Date();
+            let parts = dateString.split('/');
+            let inputDate = new Date(parts[2], parts[1] - 1, parts[0]);
 
-
-        let today = new Date();
-        let dd = String(today.getDate()).padStart(2, '0');
-        let mm = String(today.getMonth() + 1).padStart(2, '0');
-        let yyyy = today.getFullYear();
-
-        today = yyyy + '-' + mm + '-' + dd;
-        $('#pDate').attr('max', today);
-
-
-        $("#product").on('submit', function (e) {
-            e.preventDefault();
-            let min = 4;
-            let userValid = $("#pName").val();
-            let charlength = userValid.length;
-            if (charlength < min) {
-                $('#err-pName').html("*Product Name minimun 3 characters");
-                $('#err-pName').removeClass('d-none');
-                return false;
+            if (isNaN(inputDate.getTime())) {
+                return null;
             }
-            $('#err-pName').addClass('d-none');
-            $('#err-pName').html('');
+
+            if (inputDate > today) {
+                return $('#err-pDate').html("*'Date cannot be in the future'");
+            }
+
+            var timeDiff = today - inputDate;
+            var days = Math.floor(timeDiff / (1000 * 3600 * 24));
+            return days;
+        }
+
+        $('#pDate').on('input', function () {
+            var inputDate = $(this).val();
+
+            if (inputDate.length === 10) {
+                var dateParts = inputDate.split('/');
+                if (dateParts.length === 3 && dateParts[0].length === 2 && dateParts[1].length === 2 && dateParts[2].length === 4) {
+                    var age = calculateAge(inputDate);
+                    if (age === null) {
+                        $('#pAge').text('Invalid date format');
+                    } else if (age === 'Date cannot be in the future') {
+                        $('#pAge').text(age);
+                    } else {
+                        $('#pAge').text('Age: ' + age + ' days');
+                    }
+                }
+            } else {
+                $('#pAge').text('Age: N/A');
+            }
+        });
+
+        $('#pDate').on('input', function () {
+            var input = $(this).val().replace(/[^\d]/g, '');
+            var formatted = input.slice(0, 2) + (input.length > 2 ? '/' : '') + input.slice(2, 4) + (input.length > 4 ? '/' : '') + input.slice(4, 8);
+            $(this).val(formatted);
         })
-        return true;
-    })
 
+            // for product name field
 
+            $("#product").on('submit', function (e) {
+                e.preventDefault();
+                let min = 4;
+                let userValid = $("#pName").val();
+                let charlength = userValid.length;
+                if (charlength < min) {
+                    $('#err-pName').html("*Product Name minimun 3 characters");
+                    $('#err-pName').removeClass('d-none');
+                    return false;
+                }
+                $('#err-pName').addClass('d-none');
+                $('#err-pName').html('');
+            })
+            return true;
+
+        })
 </script>
 
 </html>
