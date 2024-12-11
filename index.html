@@ -41,8 +41,7 @@
 
         <label class="mt-3" for="pDate"><b>Manufacturing Date :</b></label>
         <input type="text" class="form-control" id="pDate" placeholder="DD/MM/YYYY" maxlength="10"><br>
-        <div id="result" id="pAge"></div>
-        <div id="err-pDate" class=""></div>
+        <div id="pAge"></div>
 
         <button type="submit" id="submit" class="btn btn-primary mt-2 float-end" name="submit">Submit</button>
     </form>
@@ -148,7 +147,7 @@
             }
 
             if (inputDate > today) {
-                return $('#err-pDate').html("*'Date cannot be in the future'");
+                return "Date cannot be in the future";
             }
 
             var timeDiff = today - inputDate;
@@ -186,7 +185,7 @@
 
             $("#product").on('submit', function (e) {
                 e.preventDefault();
-                let min = 4;
+                let min = 3;
                 let userValid = $("#pName").val();
                 let charlength = userValid.length;
                 if (charlength < min) {
