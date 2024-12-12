@@ -23,20 +23,58 @@
 
         <label class="mt-3" for="pRange"><b>Price Range :</b></label><br>
         <input type="range" class="slider" style="width: 100%;" id="minPrice" min="0" max="10000" step="1" value="0">
-        <input type="range" class="slider" style="width: 100%;" id="maxPrice" min="0" max="10000" step="1" value="10000">
-        <span><b>Minimum Price is : </b><span id="minRange" class="" style="background-color: burlywood;">0</span></span><br>
-        <span><b>Maximum Price Is : </b><span id="maxRange" class="" style="background-color: burlywood;">0</span></span><br>
+        <input type="range" class="slider" style="width: 100%;" id="maxPrice" min="0" max="10000" step="1"
+            value="10000">
+        <span><b>Minimum Price is : </b><span id="minRange" class=""
+                style="background-color: burlywood;">0</span></span><br>
+        <span><b>Maximum Price Is : </b><span id="maxRange" class=""
+                style="background-color: burlywood;">0</span></span><br>
 
         <label class="mt-3" for="colorSelect"><b>Color Selection :</b></label><br>
         <input type="color" id="colorSelect" value="#ff0000">
 
-        <div class="preview-box mt-3" style="background-color: #ff0000; text-align: center;" id="colorDisplay">Selected Color</div><br>
-        <span><b>Color Name  : </b><span class="color-name" id="colorCode" style="background-color:bisque;"></span></span><br>
+        <div class="preview-box mt-3" style="background-color: #ffa200; text-align: center;" id="colorDisplay">Selected
+            Color</div><br>
+        <span><b>Color Name : </b><span class="color-name" id="colorCode"
+                style="background-color:bisque;"></span></span><br>
 
 
         <label class="mt-3" for="pDate"><b>Manufacturing Date :</b></label>
         <input type="date" class="form-control" id="pDate"><br>
         <div id="result"></div>
+
+        <label for="address"><b>Address : </b></label>
+        <input type="text" class="form-control" name="address1" id="address1" autocomplete="address-line1"
+            placeholder="Address line 1......">
+        <div id="err-add1"></div>
+        <input type="text" class="form-control" name="address2" id="address2" autocomplete="address-line2"
+            placeholder="Address line 2....(optional)">
+        <div id="err-add2"></div>
+
+        <label class="mt-3" for="postelcode"><b>Postel Code : </b></label>
+        <input type="text" class="form-control" name="postelcode" id="postelcode" autocomplete="postal-code"
+            placeholder="Enter Postel Code.......">
+        <div id="err-postel"></div>
+
+        <label class="mt-3" for="phone"><b>Phone Number : </b></label>
+        <input type="text" class="form-control" name="phone" id="phone" autocomplete="tel-country-code"
+            placeholder="Enter Phone Number....">
+        <div id="err-phone"></div>
+
+        <label for="url"><b>Website URL</b></label>
+        <input type="text" class="form-control" name="url" id="url" autocomplete="url"
+            placeholder="Enter Website URL....">
+        <div class="error" id="err-url"></div>
+        <span><b>Image is:</b>
+            <div class="favicon mt-3" id="urlfavicon"></div>
+        </span>
+
+        <div class="form-group position-relative">
+            <input class="form-control" type="text" id="productSearch" name="productSearch" placeholder="Search for products">
+            <div class="suggestions" style="cursor: pointer;" id="suggestionsContainer"></div>
+        </div>
+
+
         <button type="submit" id="submit" class="btn btn-primary mt-2 float-end" name="submit">Submit</button>
     </form>
 </body>
@@ -48,22 +86,22 @@
 
         // for prodect Name field
 
-            $('#pName').on('input', function () {
-                let inputText = $(this).val();
+        $('#pName').on('input', function () {
+            let inputText = $(this).val();
 
-                let noNumbers = inputText.replace(/[0-9]/g, '');
-                $(this).val(noNumbers);
+            let noNumbers = inputText.replace(/[0-9]/g, '');
+            $(this).val(noNumbers);
 
-                let capitalizedText = noNumbers.replace(/\b\w/g, function (match) {
-                    return match.toUpperCase();
-                });
-
-                $(this).val(capitalizedText);
-
+            let capitalizedText = noNumbers.replace(/\b\w/g, function (match) {
+                return match.toUpperCase();
             });
 
+            $(this).val(capitalizedText);
 
-            // for product code field
+        });
+
+
+        // for product code field
         $('#pCode').on('input', function () {
 
             let input = $(this).val();
@@ -86,8 +124,8 @@
 
         // for product price range field
         function formatNumber(number) {
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      }
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
 
         let minPriceSlider = $('#minPrice');
         let maxPriceSlider = $('#maxPrice');
@@ -119,14 +157,14 @@
         // for color Selection field
 
 
-        $('#colorSelect').on('input', function() {
-        var selectedColor = $(this).val();
+        $('#colorSelect').on('input', function () {
+            var selectedColor = $(this).val();
 
-        $('#colorDisplay').css('background-color', selectedColor);
-        
-        $('#colorCode').text(selectedColor);
-      });
-        
+            $('#colorDisplay').css('background-color', selectedColor);
+
+            $('#colorCode').text(selectedColor);
+        });
+
         // for Product Date field
 
         let today = new Date();
@@ -145,14 +183,240 @@
                 var timeDifference = currentDate - manufactureDateObj;
                 var daysDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
                 $('#result').html('Product Age: ' + daysDifference + ' days');
+                $('#result').css('background-color', 'bisque');
             } else {
                 $('#result').html('Please enter a valid manufacturing date.');
+                $('#result').css('background-color', 'bisque');
             }
         });
 
+
+        // for address field
+
+        function capitalizeFirstLetter(input) {
+            input.val(input.val().replace(/^./, function (match) {
+                return match.toUpperCase();
+            }));
+        }
+
+        $('#address1, #address2').on('input', function () {
+            capitalizeFirstLetter($(this));
+        });
+
+        $('#submit').click(function () {
+
+            $('#err-add1').text('');
+
+            const addressLine1 = $('#address1').val().trim();
+            if (addressLine1.length < 5) {
+                $('#err-add1').text('*Address Line 1 must be at least 5 characters long.');
+                $('#err-add1').css('color', 'red');
+                return;
+            }
+            this.submit();
+        });
+
+        // for postel code field
+
+        function formatPostalCode(input) {
+            let value = input.val().replace(/\D/g, '');
+            if (value.length > 3) {
+                value = value.substring(0, 3) + ' ' + value.substring(3, 6);
+            }
+            input.val(value);
+        }
+
+        $('#postelcode').on('input', function () {
+            let postalCodeInput = $(this);
+            let postalCodeValue = postalCodeInput.val();
+
+            if (/[^0-9 ]/.test(postalCodeValue)) {
+                postalCodeInput.val(postalCodeValue.replace(/[^0-9 ]/g, ''));
+            }
+
+            formatPostalCode(postalCodeInput);
+
+            if (postalCodeValue.replace(/\s/g, '').length === 6) {
+                $('#err-postel').text('');
+            } else {
+                $('#err-postel').text('Postal code must be 6 digits.');
+                $('#err-postel').css('color', 'red');
+            }
+        });
+
+        // for phone number field
+
+        $('#phone').on('input', function () {
+            var phoneNumber = $(this).val();
+
+            if (!phoneNumber.startsWith('+91')) {
+                phoneNumber = '+91' + phoneNumber.replace(/^(\+91)?/, '');
+            }
+
+            phoneNumber = phoneNumber.replace(/[^\d+]/g, '');
+
+            if (phoneNumber.length > 13) {
+                phoneNumber = phoneNumber.slice(0, 13);
+            }
+
+            if (phoneNumber.length > 3) {
+                phoneNumber = phoneNumber.slice(0, 3) + '-' + phoneNumber.slice(3);
+            }
+
+            $(this).val(phoneNumber);
+
+            if (/^\+91-\d{10}$/.test(phoneNumber)) {
+                $('#err-phone').text('');
+            } else {
+                $('#err-phone').text('Phone number must be in the format +91-xxxxxxxxxx');
+                $('#err-phone').css('color', 'red');
+            }
+        });
+
+        // website-url field
+
+        function isValidURL(url) {
+            const pattern = /^(https?:\/\/)?([a-z0-9\-]+\.)+[a-z]{2,6}(:[0-9]{1,4})?(\/[^\s]*)?$/i;
+            return pattern.test(url);
+        }
+
+        function ensureHttps(url) {
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                return 'https://' + url;
+            }
+            return url;
+        }
+
+        function displayFavicon(url) {
+            const faviconUrl = url + '/favicon.ico';
+            $('#urlfavicon').html('<img src="' + faviconUrl + '" alt="favicon">');
+        }
+
+        $('#url').on('input', function () {
+            var url = $(this).val().trim();
+
+            url = ensureHttps(url);
+
+            $(this).val(url);
+
+            if (isValidURL(url)) {
+                $('#err-url').text('');
+                displayFavicon(url);
+            } else {
+                $('#err-url').text('Please enter a valid URL.');
+                $('#err-url').css('color', 'red');
+                $('#urlfavicon').html('');
+            }
+        });
+
+
+        // for search field
+
+        const products = [
+            "Apple iPhone 13",
+            "Samsung Galaxy S22",
+            "Samsung Galaxy S23",
+            "Samsung Galaxy S24",
+            "Samsung Galaxy S22",
+            "OnePlus 9 Pro",
+            "OnePlus 10 Pro",
+            "OnePlus 11 Pro",
+            "OnePlus 12 Pro",
+            "OnePlus 9",
+            "OnePlus 10",
+            "OnePlus 11",
+            "OnePlus 6",
+            "OnePlus 7",
+            "Google Pixel 6",
+            "Google Pixel 7",
+            "Google Pixel 8",
+            "Sony WH-1000XM4 Headphones",
+            "Dell XPS 13 Laptop",
+            "Apple MacBook Air",
+            "Bose QuietComfort 35 II",
+            "Apple Watch Series 7",
+            "Samsung Galaxy Buds Pro",
+            "Apple iPhone 14",
+            "Apple iPhone 15",
+            "Apple iPhone 16",
+            "motorola g5"
+
+        ];
+
+        let highlightedIndex = -1;
+
+        function highlightText(text, searchTerm) {
+            const regex = new RegExp('(' + searchTerm + ')', 'ig');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        function showSuggestions(query) {
+            const suggestions = products.filter(product => product.toLowerCase().includes(query.toLowerCase()));
+            $('#suggestionsContainer').empty();
+            if (suggestions.length > 0) {
+                suggestions.forEach((product, index) => {
+                    const highlightedProduct = highlightText(product, query);
+                    $('#suggestionsContainer').append(
+                        `<div class="suggestion" data-index="${index}">${highlightedProduct}</div>`
+                    );
+                });
+                $('#suggestionsContainer').show();
+            } else {
+                $('#suggestionsContainer').hide();
+            }
+        }
+
+        function handleKeyNavigation(e) {
+            const suggestions = $('.suggestions .suggestion');
+            if (e.keyCode === 40) {
+                highlightedIndex = Math.min(highlightedIndex + 1, suggestions.length - 1);
+            } else if (e.keyCode === 38) {
+                highlightedIndex = Math.max(highlightedIndex - 1, 0);
+            } else if (e.keyCode === 13) {
+                if (highlightedIndex !== -1) {
+                    selectSuggestion(suggestions.eq(highlightedIndex).text());
+                }
+            }
+
+            suggestions.removeClass('highlight');
+            if (highlightedIndex !== -1) {
+                suggestions.eq(highlightedIndex).addClass('highlight');
+            }
+        }
+
+        function selectSuggestion(suggestion) {
+            $('#productSearch').val(suggestion);
+            $('#suggestionsContainer').hide();
+        }
+
+        $('#productSearch').on('input', function () {
+            const query = $(this).val();
+            if (query.length > 0) {
+                showSuggestions(query);
+            } else {
+                $('#suggestionsContainer').hide();
+            }
+        });
+
+        $('#productSearch').on('keydown', function (e) {
+            handleKeyNavigation(e);
+        });
+
+        $(document).on('click', '.suggestion', function () {
+            selectSuggestion($(this).text());
+        });
+
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('.form-group').length) {
+                $('#suggestionsContainer').hide();
+            }
+        });
+
+
+
         // for product name field
 
-            $("#product").on('submit', function (e) {
+        $("#product").on('submit', function (e) {
             e.preventDefault();
             let min = 3;
             let userValid = $("#pName").val();
@@ -167,7 +431,6 @@
         })
         return true;
 
-       
     })
 </script>
 
