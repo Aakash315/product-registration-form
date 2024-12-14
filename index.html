@@ -206,13 +206,15 @@
             var address2 = $('#address2').val();
 
             if (address1.length < 5) {
-                $('#err-add1').text("Address Line 1 must have at least 5 characters.");
+                $('#err-add1').text("*Address Line 1 must have at least 5 characters.");
+                $('#err-add1').css('color', 'red');
                 return;
             }
 
 
             if (address2 && address2.length < 5) {
-                $('#err-add2').text("Address Line 2 must have at least 5 characters.");
+                $('#err-add2').text("*Address Line 2 must have at least 5 characters.");
+                $('#err-add2').css('color', 'red');
                 return;
             }
         });
@@ -241,7 +243,7 @@
             if (postalCodeValue.replace(/\s/g, '').length === 6) {
                 $('#err-postel').text('');
             } else {
-                $('#err-postel').text('Postal code must be 6 digits.');
+                $('#err-postel').text('*Postal code must be 6 digits.');
                 $('#err-postel').css('color', 'red');
             }
         });
@@ -270,7 +272,7 @@
             if (/^\+91-\d{10}$/.test(phoneNumber)) {
                 $('#err-phone').text('');
             } else {
-                $('#err-phone').text('Phone number must be in the format +91-xxxxxxxxxx');
+                $('#err-phone').text('*Phone number must be in the format +91-xxxxxxxxxx');
                 $('#err-phone').css('color', 'red');
             }
         });

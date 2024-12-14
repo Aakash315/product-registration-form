@@ -1,0 +1,141 @@
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-btn {
+    padding: 10px;
+    background-color: #00bfff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 200px;
+}
+
+.dropdown-btn:focus {
+    outline: none;
+}
+
+#selectedCount {
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 200px;
+    border: 1px solid #ddd;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.dropdown-content input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.checkbox-group {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    padding: 5px 0;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.dropdown-btn.active + .dropdown-content {
+    display: block;
+}
+
+
+/* for size option */
+.size-option {
+    cursor: pointer;
+    border-radius: 25px;
+    padding: 5px 5px;
+    font-size: 16px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    min-width: 60px;
+    text-align: center;
+}
+
+/* for tag input */
+
+.tag-input {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid #ced4da;
+    padding: 5px;
+    border-radius: 5px;
+    min-height: 40px;
+    align-items: center;
+    cursor: text;
+  }
+
+  .tag {
+    background-color: #2f8ef3;
+    color: white;
+    padding: 5px 10px;
+    margin: 2px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+  }
+
+  .tag i {
+    margin-left: 5px;
+    cursor: pointer;
+  }
+
+  .tag-input input {
+    border: none;
+    outline: none;
+    flex-grow: 1;
+    padding: 5px;
+    min-width: 100px;
+  }
+
+  .was-validated .invalid-feedback {
+    display: block;
+  }
+
+
+/* for toggle switch */
+
+.form-check-label {
+    font-size: 1.1rem;
+    margin-left: 10px;
+}
+
+.form-check-input:checked {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.form-check-input {
+    cursor: pointer;
+}

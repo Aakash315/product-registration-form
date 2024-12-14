@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Create Registration Form</title>
+    <link rel="stylesheet" href="create.css">
+</head>
+
+<body class="d-flex justify-content-center align-item-center">
+    <form id="product" action="" class="mt-4">
+        <h2><u>Create Form</u></h2>
+        <label for="pcategory"><b>Category : </b></label><br>
+        <div class="dropdown mt-3">
+            <button type="button" class="dropdown-btn" id="dropdownButton">Select Categories</button>
+            <div class="dropdown-content">
+                <input type="text" id="searchInput" placeholder="Search categories...">
+                <div class="checkbox-group">
+                    <label><input type="checkbox" class="category" value="Product 1"> Product 1</label>
+                    <label><input type="checkbox" class="category" value="Product 2"> Product 2</label>
+                    <label><input type="checkbox" class="category" value="Product 3"> Product 3</label>
+                    <label><input type="checkbox" class="category" value="Product 4"> Product 4</label>
+                    <label><input type="checkbox" class="category" value="Product 5"> Product 5</label>
+                </div>
+            </div>
+        </div>
+        <br><span id="err-cate" style="color: red; display: none;"></span><br>
+        <div class="" id="cate-msg"></div>
+
+        <label for="pSize"><b>Size : </b></label><br>
+        <div class="d-flex justify-content-between mt-3">
+            <label class="btn btn-outline-primary size-option" for="sizeS">
+                <input type="radio" id="sizeS" name="size" value="S"> S
+            </label>
+            <label class="btn btn-outline-primary size-option" for="sizeM">
+                <input type="radio" id="sizeM" name="size" value="M"> M
+            </label>
+            <label class="btn btn-outline-primary size-option" for="sizeL">
+                <input type="radio" id="sizeL" name="size" value="L"> L
+            </label>
+            <label class="btn btn-outline-primary size-option" for="sizeXL">
+                <input type="radio" id="sizeXL" name="size" value="XL"> XL
+            </label>
+            <label class="btn btn-outline-primary size-option" for="sizeXXL">
+                <input type="radio" id="sizeXXL" name="size" value="XXL"> XXL
+            </label>
+        </div>
+        <div id="err-size" class="mt-3" style="color: red; display: none;"></div>
+        <div class="mt-3" id="size-msg"></div>
+
+
+        <div class="mb-3">
+            <label for="ptag" class="form-label"><b>Tags :</b></label>
+            <div class="tag-input" id="tagInput">
+                <input type="text" class="form-control" id="ptag" placeholder="Enter tags..." required />
+            </div>
+            <div class="mt-3" id="tag-msg">You can only add up to 5 tags</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="prating" class="form-label"><b>Rating : </b></label>
+            <input type="text" class="form-control" name="prating" id="prating" placeholder="Rating">
+        </div>
+
+
+        <div class="mb-3">
+            <label for="stock" class="form-label"><b>In Stock / Out of Stock</b></label>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="stock" data-on="In Stock" data-off="Out of Stock">
+                <label class="form-check-label" for="stock">Out of Stock</label>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="featured" class="form-label"><b>Featured Product</b></label>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="featured" data-on="Featured"
+                    data-off="Not Featured">
+                <label class="form-check-label" for="featured">Not Featured</label>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="freeShipping" class="form-label"><b>Free Shipping</b></label>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="freeShipping" data-on="Free Shipping"
+                    data-off="No Free Shipping">
+                <label class="form-check-label" for="freeShipping">No Free Shipping</label>
+            </div>
+        </div>
+        <div class="mt-3" id="output"></div>
+
+
+
+        <button type="submit" id="submit" class="btn btn-primary mt-2 float-end" name="submit">Submit</button>
+    </form>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+<script>
+
+    $(function () {
+
+        // for category selection field
+
+        $('#dropdownButton').on('click', function () {
+            $(this).toggleClass('active');
+            $('.dropdown-content').toggle();
+        });
+
+        $('#searchInput').on('keyup', function () {
+            var searchTerm = $(this).val().toLowerCase();
+            $('.checkbox-group label').each(function () {
+                var labelText = $(this).text().toLowerCase();
+                if (labelText.indexOf(searchTerm) > -1) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+
+        $('.category').on('change', function () {
+            var selectedCount = $('.category:checked').length;
+            // $('#selectedCount').text(`(${selectedCount})`);
+            $('#cate-msg').html("Selected Categories : " + selectedCount);
+            $('#cate-msg').css('background-color', 'bisque');
+
+        });
+
+
+        // for size option field
+
+        $('input[type="radio"]').on('change', function () {
+            var selectedSize = $(this).val();
+            $('#size-msg').html("Selected size : " + selectedSize);
+            $('#size-msg').css('background-color', 'bisque');
+        });
+
+
+        // for tag input
+
+        const maxTags = 5;
+
+        function createTag(tag) {
+            const tagElement = $('<span class="tag"></span>').text(tag);
+            const deleteIcon = $('<i class="fas fa-times"></i>');
+            tagElement.append(deleteIcon);
+            return tagElement;
+        }
+
+        function addTag(tag) {
+            if (tag && $('#tagInput .tag').length < maxTags) {
+                const tagElement = createTag(tag);
+                $('#tagInput').append(tagElement);
+                $('#ptag').val("");
+            }
+        }
+
+        $('#tagInput').on('click', '.tag i', function () {
+            $(this).parent().remove();
+        });
+
+        $('#ptag').on('keydown', function (e) {
+            const tagInput = $(this).val().trim();
+
+            if ((e.key === "Enter" || e.key === ",") && tagInput !== "") {
+                e.preventDefault();
+                addTag(tagInput);
+            }
+        });
+
+        $('#product').on('submit', function (e) {
+            e.preventDefault();
+
+            const tagCount = $('#tagInput .tag').length;
+            if (tagCount > maxTags) {
+                $(this).addClass('was-validated');
+            } else {
+                $(this).removeClass('was-validated');
+                $('#tag-msg').html('Form submitted with tags: ' + $('#tagInput .tag').map(function () {
+                    return $(this).text().replace('×', '');
+                }).get().join(', '));
+                $('#tag-msg').css('background-color', 'bisque');
+            }
+        });
+        $('#ptag').on('keydown', function (e) {
+            if (e.key === "Backspace" && $(this).val() === "") {
+                const lastTag = $('#tagInput .tag').last();
+                if (lastTag.length) {
+                    lastTag.remove();
+                }
+            }
+        });
+
+        // for rating field
+
+
+        // for toggle switch field
+
+        function updateLabel(selector) {
+            let onLabel = $(selector).data('on');
+            let offLabel = $(selector).data('off');
+
+            if ($(selector).prop('checked')) {
+                $(selector).next('label').text(onLabel);
+            } else {
+                $(selector).next('label').text(offLabel);
+            }
+        }
+
+        updateLabel('#stock');
+        updateLabel('#featured');
+        updateLabel('#freeShipping');
+
+        $('#stock, #featured, #freeShipping').on('change', function () {
+            updateLabel(this);
+        });
+
+        $('#product').on('submit', function (event) {
+            event.preventDefault();
+
+            const stockStatus = $('#stock').prop('checked') ? 'In Stock' : 'Out of Stock';
+            const featuredStatus = $('#featured').prop('checked') ? 'Featured' : 'Not Featured';
+            const shippingStatus = $('#freeShipping').prop('checked') ? 'Free Shipping' : 'No Free Shipping';
+
+            $('#output').html(`
+            <p><strong>In Stock / Out of Stock:</strong> ${stockStatus}</p>
+            <p><strong>Featured Product:</strong> ${featuredStatus}</p>
+            <p><strong>Free Shipping:</strong> ${shippingStatus}</p>
+        `);
+        $('#output').css('background-color', 'bisque')
+        });
+
+
+
+        // for category selection field
+
+
+        $('#product').on('submit', function (event) {
+            event.preventDefault();
+
+            let selectedCount = $('.category:checked').length;
+            if (selectedCount === 0) {
+                $('#err-cate').show();
+                $('#err-cate').text('*Please select at least one category.');
+            } else {
+                $('#err-cate').hide();
+            }
+
+            // for size option field
+
+            let selectedSize = $('input[name="size"]:checked').val();
+            if (!selectedSize) {
+                $('#err-size').show();
+                $('#err-size').text('*Please select a size.');
+            } else {
+                $('#err-size').hide();
+            }
+        });
+
+
+
+    })
+</script>
+
+</html>
